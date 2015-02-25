@@ -24,7 +24,7 @@ typedef void (^makabaReturnBlockWithError) (NSError *error);
 
 @interface Makaba : NSObject <UIWebViewDelegate>
 
-@property (nonatomic) id makabaDelegate;
+@property (nonatomic) id<makabaDelegateProtocol> makabaDelegate;
 
 +(id)shared;
 
