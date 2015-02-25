@@ -86,27 +86,25 @@
     return self;
 }
 
+-(NSArray *)getCachedCategories
+{
+    return [MBoardCategory MR_findAll];
+}
+
 -(NSArray *)getCachedBoards
 {
     return [MBoard MR_findAll];
 }
 
--(void)getBoardsDataWithSuccessHandler:(makabaDataReturnBlockWithArray)successHandler failureHandler:(makabaDataReturnBlockWithError)failureHandler
+-(void)getBoardsDataWithSuccessHandler:(void (^)(NSArray *, NSArray *))successHandler
+                        failureHandler:(makabaDataReturnBlockWithError)failureHandler
 {
     if (successHandler)
     {
-        
-//        NSArray *oldBoards = [MBoard MR_findAll];
-//        NSArray *oldCategories = [MBoardCategory MR_findAll];
-        
-//        if (oldBoards)
-        {
-//             successHandler(oldBoards);
-        }
-
         [[Makaba shared] getBoardsWithSuccessHandler:^(NSDictionary *result)
         {
             NSMutableArray *boards = [NSMutableArray array];
+            NSMutableArray *categories = [NSMutableArray array];
             
             [MBoard MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
             [MBoardCategory MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
@@ -120,6 +118,7 @@
                     
                     MBoardCategory *category = [MBoardCategory MR_createEntity];
                     category.name = jCategory;
+                    [categories addObject:category];
                     //                NSLog(@"%@ ", category);
                     //
                     for (id jBoard in [result objectForKey:jCategory])
@@ -136,7 +135,7 @@
                         board.tripcodes = [jBoard objectForKey:@"tripcodes"];
                         board.category = category;
                         
-                        [category addBoardsObject:board];
+//                        [category addBoardsObject:board];
                         //                    board.defaultName = [jBoard objectForKey:@"def"];
                         //                    NSLog(@"%@ ", board);
                         [boards addObject:board];
@@ -144,7 +143,7 @@
                 }
                 
                 [self saveContext];
-                successHandler(boards);
+                successHandler(categories, boards);
             }];
             
 

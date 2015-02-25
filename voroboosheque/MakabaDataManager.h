@@ -19,9 +19,12 @@ typedef void (^makabaDataReturnBlockWithError) (NSError *error);
 
 +(id)shared;
 
-
+-(NSArray*)getCachedCategories;
 -(NSArray*)getCachedBoards;
--(void)getBoardsDataWithSuccessHandler:(makabaDataReturnBlockWithArray)successHandler
+//-(void)getBoardsDataWithSuccessHandler:(makabaDataReturnBlockWithArray)successHandler
+//                        failureHandler:(makabaDataReturnBlockWithError)failureHandler;
+
+-(void)getBoardsDataWithSuccessHandler:(void (^)(NSArray *categories, NSArray *boards))successHandler
                         failureHandler:(makabaDataReturnBlockWithError)failureHandler;
 
 @end

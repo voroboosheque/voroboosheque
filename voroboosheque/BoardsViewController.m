@@ -9,10 +9,12 @@
 #import "BoardsViewController.h"
 #import "MakabaDataManager.h"
 #import "MBoard.h"
+#import "MBoardCategory.h"
 
 @interface BoardsViewController ()
 
 @property (nonatomic) NSArray* boards;
+@property (nonatomic) NSArray* categories;
 
 @end
 
@@ -34,6 +36,7 @@
                   forControlEvents:UIControlEventValueChanged];
 
     self.boards = [[MakabaDataManager shared] getCachedBoards];
+    self.categories = [[MakabaDataManager shared] getCachedCategories];
     [self reloadData];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -50,9 +53,10 @@
 
 -(void)fetchTableData
 {
-    [[MakabaDataManager shared] getBoardsDataWithSuccessHandler:^(NSArray *result)
+    [[MakabaDataManager shared] getBoardsDataWithSuccessHandler:^(NSArray *categories, NSArray *boards)
      {
-         self.boards = result;
+         self.categories = categories;
+         self.boards = boards;
          [self reloadData];
          
          // End the refreshing
@@ -80,16 +84,26 @@
     [self.tableView reloadData];
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 1;
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    MBoardCategory *category = [self.categories objectAtIndex:section];
+    return category.name;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+
+    // Return the number of sections.
+    return [self.categories count];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+
     // Return the number of rows in the section.
-    return [self.boards count];
+    MBoardCategory *category = [self.categories objectAtIndex:section];
+    return [category.boards count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -102,7 +116,13 @@
                                       reuseIdentifier:@"boardsViewCell"];
     }
     
-    MBoard *board = [self.boards objectAtIndex:indexPath.row];
+//    MBoard *board = [self.boards objectAtIndex:indexPath.row];
+    MBoardCategory *category = [self.categories objectAtIndex:indexPath.section];
+    
+    NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+    NSArray *sortedBoards = [category.boards sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameDescriptor]];
+    
+    MBoard *board = [sortedBoards objectAtIndex:indexPath.row];
 
     cell.textLabel.text = board.id;
     cell.detailTextLabel.text = board.name;
