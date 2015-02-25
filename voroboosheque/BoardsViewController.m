@@ -27,8 +27,8 @@
     [[MakabaDataManager shared] setCurrentViewController:self];
     
     self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.backgroundColor = [UIColor purpleColor];
-    self.refreshControl.tintColor = [UIColor whiteColor];
+//    self.refreshControl.backgroundColor = [UIColor purpleColor];
+//    self.refreshControl.tintColor = [UIColor whiteColor];
     [self.refreshControl addTarget:self
                             action:@selector(fetchTableData)
                   forControlEvents:UIControlEventValueChanged];
@@ -61,7 +61,7 @@
              NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
              [formatter setDateFormat:@"MMM d, h:mm a"];
              NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
-             NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor whiteColor]
+             NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor grayColor]
                                                                          forKey:NSForegroundColorAttributeName];
              NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
              self.refreshControl.attributedTitle = attributedTitle;
@@ -106,8 +106,6 @@
 
     cell.textLabel.text = board.id;
     cell.detailTextLabel.text = board.name;
-    
-    // Configure the cell...
     
     return cell;
 }

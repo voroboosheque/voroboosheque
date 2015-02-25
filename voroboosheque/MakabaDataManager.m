@@ -96,10 +96,10 @@
     if (successHandler)
     {
         
-        NSArray *oldBoards = [MBoard MR_findAll];
+//        NSArray *oldBoards = [MBoard MR_findAll];
 //        NSArray *oldCategories = [MBoardCategory MR_findAll];
         
-        if (oldBoards)
+//        if (oldBoards)
         {
 //             successHandler(oldBoards);
         }
@@ -111,38 +111,43 @@
             [MBoard MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
             [MBoardCategory MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
             
-            for (NSString *jCategory in result)
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^
             {
-//                MBoard *board = [MBoard MR_createEntity];
-//                board.name = [jsonBoard objectForKey:@"name"];
-                
-                MBoardCategory *category = [MBoardCategory MR_createEntity];
-                category.name = jCategory;
-//                NSLog(@"%@ ", category);
-//
-                for (id jBoard in [result objectForKey:jCategory])
+                for (NSString *jCategory in result)
                 {
-                    MBoard *board = [MBoard MR_createEntity];
+                    //                MBoard *board = [MBoard MR_createEntity];
+                    //                board.name = [jsonBoard objectForKey:@"name"];
                     
-                    board.name = [jBoard objectForKey:@"name"];
-                    board.bumpLimit = [jBoard objectForKey:@"bump_limit"];
-                    board.defaultName = [jBoard objectForKey:@"default_name"];
-                    board.enablePosting = [jBoard objectForKey:@"enable_posting"];
-                    board.id = [jBoard objectForKey:@"id"];
-                    board.pages = [jBoard objectForKey:@"pages"];
-                    board.sage = [jBoard objectForKey:@"sage"];
-                    board.tripcodes = [jBoard objectForKey:@"tripcodes"];
-                    board.category = category;
-                    
-                    [category addBoardsObject:board];
-//                    board.defaultName = [jBoard objectForKey:@"def"];
-//                    NSLog(@"%@ ", board);
-                    [boards addObject:board];
+                    MBoardCategory *category = [MBoardCategory MR_createEntity];
+                    category.name = jCategory;
+                    //                NSLog(@"%@ ", category);
+                    //
+                    for (id jBoard in [result objectForKey:jCategory])
+                    {
+                        MBoard *board = [MBoard MR_createEntity];
+                        
+                        board.name = [jBoard objectForKey:@"name"];
+                        board.bumpLimit = [jBoard objectForKey:@"bump_limit"];
+                        board.defaultName = [jBoard objectForKey:@"default_name"];
+                        board.enablePosting = [jBoard objectForKey:@"enable_posting"];
+                        board.id = [jBoard objectForKey:@"id"];
+                        board.pages = [jBoard objectForKey:@"pages"];
+                        board.sage = [jBoard objectForKey:@"sage"];
+                        board.tripcodes = [jBoard objectForKey:@"tripcodes"];
+                        board.category = category;
+                        
+                        [category addBoardsObject:board];
+                        //                    board.defaultName = [jBoard objectForKey:@"def"];
+                        //                    NSLog(@"%@ ", board);
+                        [boards addObject:board];
+                    }
                 }
-            }
+                
+                [self saveContext];
+                successHandler(boards);
+            }];
             
-            [self saveContext];
-            successHandler(boards);
+
         }
         failureHandler:^(NSError *error)
         {
@@ -226,6 +231,11 @@
 {
     //TODO: create context for non-main threads
     //https://github.com/magicalpanda/MagicalRecord/wiki/Working-with-Managed-Object-Contexts
+//    [[NSManagedObjectContext MR_contextForCurrentThread] MR_saveToPersistentStoreAndWait];
+    
+    [[NSManagedObjectContext MR_defaultContext] MR_saveToPersistentStoreAndWait];
+    
+    /*
     [[NSManagedObjectContext MR_contextForCurrentThread] MR_saveToPersistentStoreWithCompletion:^(BOOL success, NSError *error)
     {
         if (success)
@@ -237,6 +247,7 @@
             NSLog(@"Error saving context: %@", error.description);
         }
     }];
+     */
 }
 
 - (UIViewController*) getTopMostViewController
