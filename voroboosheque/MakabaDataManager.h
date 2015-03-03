@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @class UIViewController;
+@class MBoard;
 
 typedef void (^makabaDataReturnBlockWithArray) (NSArray *result);
 typedef void (^makabaDataReturnBlockWithError) (NSError *error);
@@ -26,5 +27,9 @@ typedef void (^makabaDataReturnBlockWithError) (NSError *error);
 
 -(void)getBoardsDataWithSuccessHandler:(void (^)(NSArray *categories, NSArray *boards))successHandler
                         failureHandler:(makabaDataReturnBlockWithError)failureHandler;
+
+-(void)getThreadsDataForBoard:(MBoard*)board
+               successHandler:(void (^)(NSArray *threads))successHandler
+               failureHandler:(makabaDataReturnBlockWithError)failureHandler;
 
 @end

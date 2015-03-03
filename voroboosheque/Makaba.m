@@ -84,7 +84,9 @@
         NSMutableArray *threads = [NSMutableArray array];
         for (NSDictionary *thread in [result objectForKey:@"threads"])
         {
-            [threads addObject: [thread objectForKey:@"thread_num"]];
+            [threads addObject: thread];
+//            [threads addObject: [thread objectForKey:@"thread_num"]];
+//            NSLog(@"KKK %@", [[[thread objectForKey:@"posts"] firstObject] objectForKey:@"comment"]) ;
         }
         
         successHandler(threads);

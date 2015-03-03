@@ -1,0 +1,18 @@
+//
+//  MThread.m
+//  voroboosheque
+//
+//  Created by admin on 26/02/15.
+//  Copyright (c) 2015 voroboosheque. All rights reserved.
+//
+
+#import "MThread.h"
+#import "MPost.h"
+
+
+@implementation MThread
+
+@dynamic num;
+@dynamic posts;
+
+@end

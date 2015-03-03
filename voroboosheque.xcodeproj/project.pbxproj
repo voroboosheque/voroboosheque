@@ -11,6 +11,9 @@
 		84141FAE1A9C6BFE00259B4E /* MBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 84141FAD1A9C6BFE00259B4E /* MBoard.m */; };
 		84141FB11A9C757A00259B4E /* CloudflareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84141FB01A9C757A00259B4E /* CloudflareViewController.m */; };
 		84141FB41A9CA29800259B4E /* MBoardCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84141FB31A9CA29800259B4E /* MBoardCategory.m */; };
+		8416A48F1A9E401F00932AB0 /* ThreadsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8416A48E1A9E401F00932AB0 /* ThreadsViewController.m */; };
+		841F26BD1A9F0151004D618D /* MThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 841F26BC1A9F0151004D618D /* MThread.m */; };
+		841F26C01A9F0152004D618D /* MPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 841F26BF1A9F0152004D618D /* MPost.m */; };
 		8431421A1A9B7A34001132E2 /* Makaba.m in Sources */ = {isa = PBXBuildFile; fileRef = 843142191A9B7A34001132E2 /* Makaba.m */; };
 		8431421D1A9B922C001132E2 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8431421B1A9B922C001132E2 /* Model.xcdatamodeld */; };
 		843142211A9B9857001132E2 /* MakabaDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 843142201A9B9857001132E2 /* MakabaDataManager.m */; };
@@ -22,6 +25,7 @@
 		844A5F3B1A9A01A300B0F131 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 844A5F3A1A9A01A300B0F131 /* Images.xcassets */; };
 		844A5F3E1A9A01A300B0F131 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844A5F3C1A9A01A300B0F131 /* LaunchScreen.xib */; };
 		844A5F4A1A9A01A300B0F131 /* vorobooshequeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 844A5F491A9A01A300B0F131 /* vorobooshequeTests.m */; };
+		84D9BB901AA0566B00F4F1DE /* PostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D9BB8F1AA0566B00F4F1DE /* PostsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +46,12 @@
 		84141FB01A9C757A00259B4E /* CloudflareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudflareViewController.m; sourceTree = "<group>"; };
 		84141FB21A9CA29800259B4E /* MBoardCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBoardCategory.h; sourceTree = "<group>"; };
 		84141FB31A9CA29800259B4E /* MBoardCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBoardCategory.m; sourceTree = "<group>"; };
+		8416A48D1A9E401F00932AB0 /* ThreadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadsViewController.h; sourceTree = "<group>"; };
+		8416A48E1A9E401F00932AB0 /* ThreadsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadsViewController.m; sourceTree = "<group>"; };
+		841F26BB1A9F0151004D618D /* MThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MThread.h; sourceTree = "<group>"; };
+		841F26BC1A9F0151004D618D /* MThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MThread.m; sourceTree = "<group>"; };
+		841F26BE1A9F0152004D618D /* MPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPost.h; sourceTree = "<group>"; };
+		841F26BF1A9F0152004D618D /* MPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPost.m; sourceTree = "<group>"; };
 		843142181A9B7A34001132E2 /* Makaba.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Makaba.h; sourceTree = "<group>"; };
 		843142191A9B7A34001132E2 /* Makaba.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Makaba.m; sourceTree = "<group>"; };
 		8431421C1A9B922C001132E2 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -62,6 +72,8 @@
 		844A5F431A9A01A300B0F131 /* vorobooshequeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vorobooshequeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		844A5F481A9A01A300B0F131 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		844A5F491A9A01A300B0F131 /* vorobooshequeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = vorobooshequeTests.m; sourceTree = "<group>"; };
+		84D9BB8E1AA0566B00F4F1DE /* PostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostsViewController.h; sourceTree = "<group>"; };
+		84D9BB8F1AA0566B00F4F1DE /* PostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostsViewController.m; sourceTree = "<group>"; };
 		ABA5C8F9630984E03D7476D3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		ACF58247101973158FA0282C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -102,6 +114,10 @@
 				843142241A9B99A5001132E2 /* BoardsViewController.m */,
 				84141FAF1A9C757A00259B4E /* CloudflareViewController.h */,
 				84141FB01A9C757A00259B4E /* CloudflareViewController.m */,
+				8416A48D1A9E401F00932AB0 /* ThreadsViewController.h */,
+				8416A48E1A9E401F00932AB0 /* ThreadsViewController.m */,
+				84D9BB8E1AA0566B00F4F1DE /* PostsViewController.h */,
+				84D9BB8F1AA0566B00F4F1DE /* PostsViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -109,6 +125,10 @@
 		8431421E1A9B9539001132E2 /* ManagedObjects */ = {
 			isa = PBXGroup;
 			children = (
+				841F26BE1A9F0152004D618D /* MPost.h */,
+				841F26BF1A9F0152004D618D /* MPost.m */,
+				841F26BB1A9F0151004D618D /* MThread.h */,
+				841F26BC1A9F0151004D618D /* MThread.m */,
 				84141FB21A9CA29800259B4E /* MBoardCategory.h */,
 				84141FB31A9CA29800259B4E /* MBoardCategory.m */,
 				84141FAC1A9C6BFE00259B4E /* MBoard.h */,
@@ -336,11 +356,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				84141FAE1A9C6BFE00259B4E /* MBoard.m in Sources */,
+				841F26BD1A9F0151004D618D /* MThread.m in Sources */,
 				843142211A9B9857001132E2 /* MakabaDataManager.m in Sources */,
 				84141FB41A9CA29800259B4E /* MBoardCategory.m in Sources */,
 				8431421A1A9B7A34001132E2 /* Makaba.m in Sources */,
+				841F26C01A9F0152004D618D /* MPost.m in Sources */,
 				844A5F361A9A01A300B0F131 /* ViewController.m in Sources */,
 				843142251A9B99A5001132E2 /* BoardsViewController.m in Sources */,
+				84D9BB901AA0566B00F4F1DE /* PostsViewController.m in Sources */,
+				8416A48F1A9E401F00932AB0 /* ThreadsViewController.m in Sources */,
 				8431421D1A9B922C001132E2 /* Model.xcdatamodeld in Sources */,
 				844A5F331A9A01A300B0F131 /* AppDelegate.m in Sources */,
 				84141FB11A9C757A00259B4E /* CloudflareViewController.m in Sources */,

@@ -10,6 +10,7 @@
 #import "MakabaDataManager.h"
 #import "MBoard.h"
 #import "MBoardCategory.h"
+#import "ThreadsViewController.h"
 
 @interface BoardsViewController ()
 
@@ -128,6 +129,20 @@
     cell.detailTextLabel.text = board.name;
     
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    ThreadsViewController *threadsVC = [storyboard instantiateViewControllerWithIdentifier:@"ThreadsViewController"];
+    
+    MBoardCategory *category = [self.categories objectAtIndex:indexPath.section];
+    NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+    NSArray *sortedBoards = [category.boards sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameDescriptor]];
+    
+    threadsVC.board = [sortedBoards objectAtIndex:indexPath.row];
+
+    [self.navigationController pushViewController:threadsVC animated:YES];
 }
 
 /*

@@ -11,6 +11,8 @@
 #import "Makaba.h"
 #import "MBoard.h"
 #import "MBoardCategory.h"
+#import "MThread.h"
+#import "MPost.h"
 #import "CloudflareViewController.h"
 
 //#define MR_SHORTHAND
@@ -99,6 +101,12 @@
 -(void)getBoardsDataWithSuccessHandler:(void (^)(NSArray *, NSArray *))successHandler
                         failureHandler:(makabaDataReturnBlockWithError)failureHandler
 {
+    [[Makaba shared] getThreadsForBoard:@"vg" successHandler:^(NSArray *result) {
+        //
+    } failureHandler:^(NSError *error) {
+        //
+    }];
+    
     if (successHandler)
     {
         [[Makaba shared] getBoardsWithSuccessHandler:^(NSDictionary *result)
@@ -113,18 +121,20 @@
             {
                 for (NSString *jCategory in result)
                 {
-                    //                MBoard *board = [MBoard MR_createEntity];
-                    //                board.name = [jsonBoard objectForKey:@"name"];
-                    
                     MBoardCategory *category = [MBoardCategory MR_createEntity];
                     category.name = jCategory;
                     [categories addObject:category];
-                    //                NSLog(@"%@ ", category);
-                    //
+
                     for (id jBoard in [result objectForKey:jCategory])
                     {
-                        MBoard *board = [MBoard MR_createEntity];
+                        //TODO: check if board with that id is unique
+                        MBoard *board = [[MBoard MR_findByAttribute:@"id" withValue:[jBoard objectForKey:@"id"]] lastObject];
                         
+                        if (!board)
+                        {
+                            board = [MBoard MR_createEntity];
+                        }
+
                         board.name = [jBoard objectForKey:@"name"];
                         board.bumpLimit = [jBoard objectForKey:@"bump_limit"];
                         board.defaultName = [jBoard objectForKey:@"default_name"];
@@ -135,10 +145,27 @@
                         board.tripcodes = [jBoard objectForKey:@"tripcodes"];
                         board.category = category;
                         
-//                        [category addBoardsObject:board];
-                        //                    board.defaultName = [jBoard objectForKey:@"def"];
-                        //                    NSLog(@"%@ ", board);
                         [boards addObject:board];
+                    }
+                    
+                    //remove from cache all MBoards not present in JSON response
+                    for (MBoard *board in category.boards)
+                    {
+                        BOOL presentInJSONResponse = NO;
+                        
+                        for (id jBoard in [result objectForKey:jCategory])
+                        {
+                            if ([[jBoard objectForKey:@"id"] isEqualToString:board.id])
+                            {
+                                presentInJSONResponse = YES;
+                            }
+                        }
+                        
+                        if (!presentInJSONResponse)
+                        {
+                            [board MR_deleteEntity];
+                            //TODO: remove all associated threads and posts
+                        }
                     }
                 }
                 
@@ -154,6 +181,56 @@
 
         }];
     }
+}
+
+-(void)getThreadsDataForBoard:(MBoard *)board
+               successHandler:(void (^)(NSArray *))successHandler
+               failureHandler:(makabaDataReturnBlockWithError)failureHandler
+{
+    [[Makaba shared] getThreadsForBoard:board.id successHandler:^(NSArray *result)
+    {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^
+        {
+            NSMutableArray *threads = [NSMutableArray array];
+            
+            for (id jThread in result)
+            {
+                id jOPPost = [[jThread objectForKey:@"posts"] firstObject];
+                
+                NSNumber *num = [NSNumber numberWithInt:[[jOPPost objectForKey:@"num"] intValue]];
+                
+                MThread *thread = [[MThread MR_findByAttribute:@"num" withValue:num] lastObject];
+                
+                if (!thread)
+                {
+                    thread = [MThread MR_createEntity];
+                }
+                
+                [threads addObject:thread];
+                
+                thread.num = num;
+                
+                MPost *post = [[MPost MR_findByAttribute:@"num" withValue:num] lastObject];
+                
+                if (!post)
+                {
+                    post = [MPost MR_createEntity];
+                    post.parent = thread;
+                    post.num = num;
+                    post.comment = [jOPPost objectForKey:@"comment"];
+                }
+                
+            }
+            
+            [self saveContext];
+            successHandler(threads);
+        }];
+    }
+    failureHandler:^(NSError *error)
+    {
+        //
+    }];
+    
 }
 
 -(void)makabaNeedsCloudflareVerification:(NSData *)data forURL:(NSURL *)url
