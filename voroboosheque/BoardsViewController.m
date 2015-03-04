@@ -36,6 +36,7 @@
                             action:@selector(fetchTableData)
                   forControlEvents:UIControlEventValueChanged];
 
+//    [[MakabaDataManager shared] resetCache];
     self.boards = [[MakabaDataManager shared] getCachedBoards];
     self.categories = [[MakabaDataManager shared] getCachedCategories];
     [self reloadData];
@@ -120,10 +121,11 @@
 //    MBoard *board = [self.boards objectAtIndex:indexPath.row];
     MBoardCategory *category = [self.categories objectAtIndex:indexPath.section];
     
-    NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
-    NSArray *sortedBoards = [category.boards sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameDescriptor]];
-    
-    MBoard *board = [sortedBoards objectAtIndex:indexPath.row];
+//    NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
+//    NSArray *sortedBoards = [category.boards sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameDescriptor]];
+//    
+//    MBoard *board = [sortedBoards objectAtIndex:indexPath.row];
+    MBoard *board = [category.boards objectAtIndex:indexPath.row];
 
     cell.textLabel.text = board.id;
     cell.detailTextLabel.text = board.name;

@@ -20,6 +20,7 @@ typedef void (^makabaDataReturnBlockWithError) (NSError *error);
 
 +(id)shared;
 
+-(void)resetCache;
 -(NSArray*)getCachedCategories;
 -(NSArray*)getCachedBoards;
 //-(void)getBoardsDataWithSuccessHandler:(makabaDataReturnBlockWithArray)successHandler

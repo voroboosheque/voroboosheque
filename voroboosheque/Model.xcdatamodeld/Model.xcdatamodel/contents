@@ -13,7 +13,7 @@
     </entity>
     <entity name="MBoardCategory" representedClassName="MBoardCategory" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="boards" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MBoard" inverseName="category" inverseEntity="MBoard" syncable="YES"/>
+        <relationship name="boards" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MBoard" inverseName="category" inverseEntity="MBoard" syncable="YES"/>
     </entity>
     <entity name="MPost" representedClassName="MPost" syncable="YES">
         <attribute name="comment" optional="YES" attributeType="String" syncable="YES"/>
@@ -26,7 +26,7 @@
     </entity>
     <elements>
         <element name="MBoard" positionX="-65" positionY="-172" width="128" height="178"/>
-        <element name="MBoardCategory" positionX="385" positionY="78" width="128" height="73"/>
+        <element name="MBoardCategory" positionX="385" positionY="78" width="128" height="75"/>
         <element name="MPost" positionX="63" positionY="171" width="128" height="88"/>
         <element name="MThread" positionX="-63" positionY="63" width="128" height="73"/>
     </elements>

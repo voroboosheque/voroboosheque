@@ -88,6 +88,16 @@
     return self;
 }
 
+-(void)resetCache
+{
+    NSArray *allObjects = [NSManagedObject MR_findAll];
+    
+    for (NSManagedObject *object in allObjects)
+    {
+        [object MR_deleteEntity];
+    }
+}
+
 -(NSArray *)getCachedCategories
 {
     return [MBoardCategory MR_findAll];
@@ -101,11 +111,14 @@
 -(void)getBoardsDataWithSuccessHandler:(void (^)(NSArray *, NSArray *))successHandler
                         failureHandler:(makabaDataReturnBlockWithError)failureHandler
 {
+    
+    /*
     [[Makaba shared] getThreadsForBoard:@"vg" successHandler:^(NSArray *result) {
         //
     } failureHandler:^(NSError *error) {
         //
     }];
+     */
     
     if (successHandler)
     {
@@ -114,14 +127,22 @@
             NSMutableArray *boards = [NSMutableArray array];
             NSMutableArray *categories = [NSMutableArray array];
             
-            [MBoard MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
-            [MBoardCategory MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
+//            [MBoard MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
+//            [MBoardCategory MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
             
             [[NSOperationQueue mainQueue] addOperationWithBlock:^
             {
+                //TODO: delete boards and categories which are not present in json
                 for (NSString *jCategory in result)
                 {
-                    MBoardCategory *category = [MBoardCategory MR_createEntity];
+                    //TODO: check if category with that id is unique
+                    MBoardCategory *category = [[MBoardCategory MR_findByAttribute:@"name" withValue:jCategory] lastObject];
+                    
+                    if (!category)
+                    {
+                        category = [MBoardCategory MR_createEntity];
+                    }
+                    
                     category.name = jCategory;
                     [categories addObject:category];
 
