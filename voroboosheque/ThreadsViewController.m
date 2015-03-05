@@ -21,10 +21,21 @@
 
 @implementation ThreadsViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     self.title = [NSString stringWithFormat:@"/%@/", self.board.id];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    //    self.refreshControl.backgroundColor = [UIColor purpleColor];
+    //    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(fetchThreads)
+                  forControlEvents:UIControlEventValueChanged];
+    
+    self.threads = [[MakabaDataManager shared] getCahcedThreadsForBoard:self.board];
+    [self reloadData];
     
     [self fetchThreads];
     
@@ -34,6 +45,16 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+//    [self fetchThreads];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear: animated];
+}
 
 -(void)fetchThreads
 {
@@ -41,6 +62,20 @@
     {
         self.threads = threads;
         [self reloadData];
+        
+        // End the refreshing
+        if (self.refreshControl) {
+            
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"MMM d, h:mm:ss a"];
+            NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
+            NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor grayColor]
+                                                                        forKey:NSForegroundColorAttributeName];
+            NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
+            self.refreshControl.attributedTitle = attributedTitle;
+            
+            [self.refreshControl endRefreshing];
+        }
     }
     failureHandler:^(NSError *error)
     {

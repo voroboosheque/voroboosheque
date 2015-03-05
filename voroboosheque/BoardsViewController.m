@@ -41,6 +41,8 @@
     self.categories = [[MakabaDataManager shared] getCachedCategories];
     [self reloadData];
     
+    [self fetchTableData];
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -48,9 +50,16 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+//    [self fetchTableData];
+}
+
 -(void)viewDidAppear:(BOOL)animated
 {
-    [self fetchTableData];
+    [super viewDidAppear: animated];
+    
 }
 
 -(void)fetchTableData
@@ -65,7 +74,7 @@
          if (self.refreshControl) {
              
              NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-             [formatter setDateFormat:@"MMM d, h:mm a"];
+             [formatter setDateFormat:@"MMM d, h:mm:ss a"];
              NSString *title = [NSString stringWithFormat:@"Last update: %@", [formatter stringFromDate:[NSDate date]]];
              NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor grayColor]
                                                                          forKey:NSForegroundColorAttributeName];
@@ -139,10 +148,9 @@
     ThreadsViewController *threadsVC = [storyboard instantiateViewControllerWithIdentifier:@"ThreadsViewController"];
     
     MBoardCategory *category = [self.categories objectAtIndex:indexPath.section];
-    NSSortDescriptor *nameDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES];
-    NSArray *sortedBoards = [category.boards sortedArrayUsingDescriptors:[NSArray arrayWithObject:nameDescriptor]];
+    MBoard *board = [category.boards objectAtIndex:indexPath.row];
     
-    threadsVC.board = [sortedBoards objectAtIndex:indexPath.row];
+    threadsVC.board = board;
 
     [self.navigationController pushViewController:threadsVC animated:YES];
 }

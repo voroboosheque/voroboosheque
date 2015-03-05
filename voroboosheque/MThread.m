@@ -2,11 +2,12 @@
 //  MThread.m
 //  voroboosheque
 //
-//  Created by admin on 26/02/15.
+//  Created by admin on 04/03/15.
 //  Copyright (c) 2015 voroboosheque. All rights reserved.
 //
 
 #import "MThread.h"
+#import "MBoard.h"
 #import "MPost.h"
 
 
@@ -14,5 +15,6 @@
 
 @dynamic num;
 @dynamic posts;
+@dynamic board;
 
 @end

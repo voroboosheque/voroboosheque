@@ -100,7 +100,7 @@
 
 -(NSArray *)getCachedCategories
 {
-    return [MBoardCategory MR_findAll];
+    return [MBoardCategory MR_findAllSortedBy:@"order" ascending:YES];
 }
 
 -(NSArray *)getCachedBoards
@@ -108,18 +108,19 @@
     return [MBoard MR_findAll];
 }
 
+-(NSArray *)getCahcedThreadsForBoard:(MBoard*)board
+{
+    return [board.threads array];
+}
+
+-(NSArray *)getCachedPostsForThread:(MThread*)thread
+{
+    return [thread.posts array];
+}
+
 -(void)getBoardsDataWithSuccessHandler:(void (^)(NSArray *, NSArray *))successHandler
                         failureHandler:(makabaDataReturnBlockWithError)failureHandler
 {
-    
-    /*
-    [[Makaba shared] getThreadsForBoard:@"vg" successHandler:^(NSArray *result) {
-        //
-    } failureHandler:^(NSError *error) {
-        //
-    }];
-     */
-    
     if (successHandler)
     {
         [[Makaba shared] getBoardsWithSuccessHandler:^(NSDictionary *result)
@@ -127,12 +128,9 @@
             NSMutableArray *boards = [NSMutableArray array];
             NSMutableArray *categories = [NSMutableArray array];
             
-//            [MBoard MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
-//            [MBoardCategory MR_deleteAllMatchingPredicate: [NSPredicate predicateWithValue:YES]];
-            
             [[NSOperationQueue mainQueue] addOperationWithBlock:^
             {
-                //TODO: delete boards and categories which are not present in json
+                NSUInteger i = 0;
                 for (NSString *jCategory in result)
                 {
                     //TODO: check if category with that id is unique
@@ -143,6 +141,8 @@
                         category = [MBoardCategory MR_createEntity];
                     }
                     
+                    category.order = [NSNumber numberWithUnsignedInteger:i];
+                    i++;
                     category.name = jCategory;
                     [categories addObject:category];
 
@@ -184,8 +184,8 @@
                         
                         if (!presentInJSONResponse)
                         {
+                            [self deleteAllThreadsForBoard:board];
                             [board MR_deleteEntity];
-                            //TODO: remove all associated threads and posts
                         }
                     }
                 }
@@ -214,24 +214,33 @@
         {
             NSMutableArray *threads = [NSMutableArray array];
             
+            int i = 0;
             for (id jThread in result)
             {
                 id jOPPost = [[jThread objectForKey:@"posts"] firstObject];
                 
                 NSNumber *num = [NSNumber numberWithInt:[[jOPPost objectForKey:@"num"] intValue]];
                 
-                MThread *thread = [[MThread MR_findByAttribute:@"num" withValue:num] lastObject];
+                NSPredicate *predicate =  [NSPredicate predicateWithFormat:@"(board == %@) AND (num == %@)", board, num];
+                
+                MThread *thread = [[MThread MR_findAllWithPredicate:predicate] lastObject];
                 
                 if (!thread)
                 {
                     thread = [MThread MR_createEntity];
+//                    thread.board = board;
+                    thread.num = num;
                 }
+                
+                [board insertObject:thread inThreadsAtIndex:i];
+//                [board addThreadsObject:thread];
+                i++;
                 
                 [threads addObject:thread];
                 
-                thread.num = num;
+                predicate =  [NSPredicate predicateWithFormat:@"(parent == %@) AND (num == %@)", thread, num];
                 
-                MPost *post = [[MPost MR_findByAttribute:@"num" withValue:num] lastObject];
+                MPost *post = [[MPost MR_findAllWithPredicate:predicate] lastObject];
                 
                 if (!post)
                 {
@@ -240,7 +249,6 @@
                     post.num = num;
                     post.comment = [jOPPost objectForKey:@"comment"];
                 }
-                
             }
             
             [self saveContext];
@@ -252,6 +260,85 @@
         //
     }];
     
+}
+
+-(void)getPostsForThread:(MThread *)thread
+    startingFromPosition:(NSUInteger)startingPosition
+          successHandler:(void (^)(NSArray *))successHandler
+          failureHandler:(makabaDataReturnBlockWithError)failureHandler
+{
+    NSLog(@"+++++++++++  %d", [[MPost MR_findAll] count]);
+    
+    [[Makaba shared] getPostsForBoard:thread.board.id
+                            andThread:[thread.num unsignedIntegerValue]
+                 startingFromPosition:startingPosition
+                       successHandler:^(NSDictionary *result)
+    {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^
+         {
+             NSMutableArray *posts = [NSMutableArray array];
+             
+             for (id jPost in result)
+             {
+                 NSNumber *num = [NSNumber numberWithInt:[[jPost objectForKey:@"num"] intValue]];
+                 NSPredicate *predicate =  [NSPredicate predicateWithFormat:@"(parent == %@) AND (num == %@)", thread, num];
+                 
+                 MPost *post = [[MPost MR_findAllWithPredicate:predicate] lastObject];
+                 
+                 if (!post)
+                 {
+                     post = [MPost MR_createEntity];
+                     post.comment = [jPost objectForKey:@"comment"];
+                     post.num = num;
+                     post.parent = thread;
+//                     [thread addPostsObject: post];
+                 }
+                 
+                 [posts addObject:post];
+                 
+             }
+             
+             [self saveContext];
+             successHandler(posts);
+         }];
+//        NSLog(@"AAAAAAAA %d", [result count]);
+    }
+    failureHandler:^(NSError *error)
+    {
+//        NSLog(@"AAAAAAAAerror %@", error.localizedDescription);
+    }];
+}
+
+-(void)deleteAllBoardsForCategory:(MBoardCategory*)category
+{
+    for (MBoard *board in category.boards)
+    {
+        [self deleteAllThreadsForBoard:board];
+        [board MR_deleteEntity];
+    }
+    
+    [self saveContext];
+}
+
+-(void)deleteAllThreadsForBoard:(MBoard*)board
+{
+    for (MThread *thread in board.threads)
+    {
+        [self deleteAllPostsForThread:thread];
+        [thread MR_deleteEntity];
+    }
+    
+    [self saveContext];
+}
+
+-(void)deleteAllPostsForThread:(MThread*)thread
+{
+    for (MPost *post in thread.posts)
+    {
+        [post MR_deleteEntity];
+    }
+    
+    [self saveContext];
 }
 
 -(void)makabaNeedsCloudflareVerification:(NSData *)data forURL:(NSURL *)url

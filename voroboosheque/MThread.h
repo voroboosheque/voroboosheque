@@ -2,19 +2,20 @@
 //  MThread.h
 //  voroboosheque
 //
-//  Created by admin on 26/02/15.
+//  Created by admin on 04/03/15.
 //  Copyright (c) 2015 voroboosheque. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class MPost;
+@class MBoard, MPost;
 
 @interface MThread : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * num;
 @property (nonatomic, retain) NSOrderedSet *posts;
+@property (nonatomic, retain) MBoard *board;
 @end
 
 @interface MThread (CoreDataGeneratedAccessors)

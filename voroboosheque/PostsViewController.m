@@ -7,15 +7,33 @@
 //
 
 #import "PostsViewController.h"
+#import "MakabaDataManager.h"
+#import "MPost.h"
+#import "MBoard.h"
+#import "MThread.h"
 
 @interface PostsViewController ()
+
+@property (nonatomic) NSMutableArray *posts;
 
 @end
 
 @implementation PostsViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    //    self.refreshControl.backgroundColor = [UIColor purpleColor];
+    //    self.refreshControl.tintColor = [UIColor whiteColor];
+    [self.refreshControl addTarget:self
+                            action:@selector(fetchPosts)
+                  forControlEvents:UIControlEventValueChanged];
+    
+    self.posts = [NSMutableArray arrayWithArray:[[MakabaDataManager shared] getCachedPostsForThread:self.thread]] ;
+
+    [self fetchNewPosts];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -24,31 +42,102 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)didReceiveMemoryWarning {
+-(void)reloadData
+{
+    [self.tableView reloadData];
+}
+
+-(void)endRefreshingWithNewItems:(NSUInteger)newItems
+{
+    // End the refreshing
+    if (self.refreshControl)
+    {
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM d, h:mm:ss a"];
+//        NSString *title = [NSString stringWithFormat:@"Last update: %@, %d new posts", [formatter stringFromDate:[NSDate date]], newItems];
+        NSString *title = [NSString stringWithFormat:@"%d new posts, %d total", newItems, self.posts.count-1];
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor grayColor]
+                                                                    forKey:NSForegroundColorAttributeName];
+        NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
+        self.refreshControl.attributedTitle = attributedTitle;
+        
+        [self.refreshControl endRefreshing];
+    }
+}
+
+-(void)fetchNewPosts
+{
+    [[MakabaDataManager shared] getPostsForThread:self.thread
+                             startingFromPosition:[self.posts count]+1
+                                   successHandler:^(NSArray *posts)
+    {
+        [self.posts addObjectsFromArray:posts];
+        [self reloadData];
+        
+        [self endRefreshingWithNewItems:posts.count];
+    }
+    failureHandler:^(NSError *error)
+    {
+        //
+    }];
+}
+
+-(void)fetchPosts
+{
+    [[MakabaDataManager shared] getPostsForThread:self.thread
+                             startingFromPosition:0 successHandler:^(NSArray *posts)
+     {
+         NSUInteger newItems = posts.count - self.posts.count;
+         self.posts = [NSMutableArray arrayWithArray:posts];
+         [self reloadData];
+         
+         [self endRefreshingWithNewItems:newItems];
+
+     }
+                                   failureHandler:^(NSError *error)
+     {
+         
+     }];
+}
+
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
 #warning Potentially incomplete method implementation.
     // Return the number of sections.
-    return 0;
+    return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
 #warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return 0;
+    return [self.posts count];
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"reuseIdentifier" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostsViewCell" forIndexPath:indexPath];
     
-    // Configure the cell...
+    if (cell == nil)
+    {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                      reuseIdentifier:@"PostsViewCell"];
+    }
+    
+    MPost *post = [self.posts objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = post.comment;
+    //    cell.detailTextLabel.text = board.name;
     
     return cell;
 }

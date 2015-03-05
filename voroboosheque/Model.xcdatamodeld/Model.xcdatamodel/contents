@@ -10,9 +10,11 @@
         <attribute name="sage" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="tripcodes" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MBoardCategory" inverseName="boards" inverseEntity="MBoardCategory" syncable="YES"/>
+        <relationship name="threads" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MThread" inverseName="board" inverseEntity="MThread" syncable="YES"/>
     </entity>
     <entity name="MBoardCategory" representedClassName="MBoardCategory" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="boards" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MBoard" inverseName="category" inverseEntity="MBoard" syncable="YES"/>
     </entity>
     <entity name="MPost" representedClassName="MPost" syncable="YES">
@@ -22,12 +24,13 @@
     </entity>
     <entity name="MThread" representedClassName="MThread" syncable="YES">
         <attribute name="num" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <relationship name="board" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MBoard" inverseName="threads" inverseEntity="MBoard" syncable="YES"/>
         <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MPost" inverseName="parent" inverseEntity="MPost" syncable="YES"/>
     </entity>
     <elements>
-        <element name="MBoard" positionX="-65" positionY="-172" width="128" height="178"/>
-        <element name="MBoardCategory" positionX="385" positionY="78" width="128" height="75"/>
+        <element name="MBoard" positionX="-65" positionY="-172" width="128" height="195"/>
+        <element name="MBoardCategory" positionX="385" positionY="78" width="128" height="90"/>
         <element name="MPost" positionX="63" positionY="171" width="128" height="88"/>
-        <element name="MThread" positionX="-63" positionY="63" width="128" height="73"/>
+        <element name="MThread" positionX="-63" positionY="63" width="128" height="88"/>
     </elements>
 </model>

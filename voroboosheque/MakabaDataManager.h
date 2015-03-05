@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 @class UIViewController;
 @class MBoard;
+@class MThread;
 
 typedef void (^makabaDataReturnBlockWithArray) (NSArray *result);
 typedef void (^makabaDataReturnBlockWithError) (NSError *error);
@@ -23,6 +24,8 @@ typedef void (^makabaDataReturnBlockWithError) (NSError *error);
 -(void)resetCache;
 -(NSArray*)getCachedCategories;
 -(NSArray*)getCachedBoards;
+-(NSArray*)getCahcedThreadsForBoard:(MBoard*)board;
+-(NSArray *)getCachedPostsForThread:(MThread*)thread;
 //-(void)getBoardsDataWithSuccessHandler:(makabaDataReturnBlockWithArray)successHandler
 //                        failureHandler:(makabaDataReturnBlockWithError)failureHandler;
 
@@ -32,5 +35,10 @@ typedef void (^makabaDataReturnBlockWithError) (NSError *error);
 -(void)getThreadsDataForBoard:(MBoard*)board
                successHandler:(void (^)(NSArray *threads))successHandler
                failureHandler:(makabaDataReturnBlockWithError)failureHandler;
+
+-(void)getPostsForThread:(MThread*)thread
+    startingFromPosition:(NSUInteger)startingPosition
+          successHandler:(void (^)(NSArray *posts))successHandler
+          failureHandler:(makabaDataReturnBlockWithError)failureHandler;
 
 @end

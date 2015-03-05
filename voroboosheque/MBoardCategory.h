@@ -2,7 +2,7 @@
 //  MBoardCategory.h
 //  voroboosheque
 //
-//  Created by admin on 04/03/15.
+//  Created by admin on 05/03/15.
 //  Copyright (c) 2015 voroboosheque. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 @interface MBoardCategory : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * order;
 @property (nonatomic, retain) NSOrderedSet *boards;
 @end
 
