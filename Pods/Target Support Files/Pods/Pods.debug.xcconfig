@@ -1,6 +1,6 @@
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/MagicalRecord"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/MagicalRecord"
-OTHER_LDFLAGS = -ObjC -l"Pods-MagicalRecord" -framework "CoreData"
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/CCBottomRefreshControl" "${PODS_ROOT}/Headers/Public/MagicalRecord" "${PODS_ROOT}/Headers/Public/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/ReactiveCocoa/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/UIView+TKGeometry"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/CCBottomRefreshControl" -isystem "${PODS_ROOT}/Headers/Public/MagicalRecord" -isystem "${PODS_ROOT}/Headers/Public/ReactiveCocoa" -isystem "${PODS_ROOT}/Headers/Public/ReactiveCocoa/ReactiveCocoa" -isystem "${PODS_ROOT}/Headers/Public/UIView+TKGeometry"
+OTHER_LDFLAGS = -ObjC -l"Pods-CCBottomRefreshControl" -l"Pods-MagicalRecord" -l"Pods-ReactiveCocoa" -l"Pods-UIView+TKGeometry" -framework "CoreData" -framework "UIKit"
 OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
 PODS_ROOT = ${SRCROOT}/Pods

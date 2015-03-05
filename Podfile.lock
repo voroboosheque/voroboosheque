@@ -1,12 +1,29 @@
 PODS:
+  - CCBottomRefreshControl (0.3.1):
+    - ReactiveCocoa (<= 2.0.0)
+    - UIView+TKGeometry
   - MagicalRecord (2.2):
     - MagicalRecord/Core (= 2.2)
   - MagicalRecord/Core (2.2)
+  - ReactiveCocoa (2.0):
+    - ReactiveCocoa/Core (= 2.0)
+    - ReactiveCocoa/no-arc (= 2.0)
+    - ReactiveCocoa/RACExtensions (= 2.0)
+  - ReactiveCocoa/Core (2.0):
+    - ReactiveCocoa/no-arc
+  - ReactiveCocoa/no-arc (2.0)
+  - ReactiveCocoa/RACExtensions (2.0):
+    - ReactiveCocoa/Core
+  - UIView+TKGeometry (0.2)
 
 DEPENDENCIES:
+  - CCBottomRefreshControl
   - MagicalRecord
 
 SPEC CHECKSUMS:
+  CCBottomRefreshControl: 919ae5ac102b421da37fcda0ae40dd2cf625b1c7
   MagicalRecord: 2b471584fc9e3137f3d0a56967917baa4979e224
+  ReactiveCocoa: 27cc8d4b5baa6460881f961131ce917813538929
+  UIView+TKGeometry: 60a88dcf2af8420175cb1c789a02d6254ebb89a7
 
 COCOAPODS: 0.35.0

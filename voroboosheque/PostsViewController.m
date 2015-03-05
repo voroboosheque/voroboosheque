@@ -11,6 +11,7 @@
 #import "MPost.h"
 #import "MBoard.h"
 #import "MThread.h"
+#import <CCBottomRefreshControl/UIScrollView+BottomRefreshControl.h>
 
 @interface PostsViewController ()
 
@@ -30,6 +31,11 @@
     [self.refreshControl addTarget:self
                             action:@selector(fetchPosts)
                   forControlEvents:UIControlEventValueChanged];
+    
+    UIRefreshControl *bottomRefreshControl = [[UIRefreshControl alloc] init];
+    [bottomRefreshControl addTarget:self
+                             action:@selector(fetchNewPosts) forControlEvents:UIControlEventValueChanged];
+    self.tableView.bottomRefreshControl = bottomRefreshControl;
     
     self.posts = [NSMutableArray arrayWithArray:[[MakabaDataManager shared] getCachedPostsForThread:self.thread]] ;
 
@@ -63,6 +69,17 @@
         self.refreshControl.attributedTitle = attributedTitle;
         
         [self.refreshControl endRefreshing];
+    }
+    
+    if (self.tableView.bottomRefreshControl)
+    {
+        NSString *title = [NSString stringWithFormat:@"%d new posts, %d total", newItems, self.posts.count-1];
+        NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor grayColor]
+                                                                    forKey:NSForegroundColorAttributeName];
+        NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
+        self.tableView.bottomRefreshControl.attributedTitle = attributedTitle;
+        
+        [self.tableView.bottomRefreshControl endRefreshing];
     }
 }
 
