@@ -25,6 +25,7 @@
 		844A5F3B1A9A01A300B0F131 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 844A5F3A1A9A01A300B0F131 /* Images.xcassets */; };
 		844A5F3E1A9A01A300B0F131 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844A5F3C1A9A01A300B0F131 /* LaunchScreen.xib */; };
 		844A5F4A1A9A01A300B0F131 /* vorobooshequeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 844A5F491A9A01A300B0F131 /* vorobooshequeTests.m */; };
+		84A4D49A1AA986E600B53F39 /* PostsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A4D4991AA986E600B53F39 /* PostsViewCell.m */; };
 		84D9BB901AA0566B00F4F1DE /* PostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D9BB8F1AA0566B00F4F1DE /* PostsViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,8 @@
 		844A5F431A9A01A300B0F131 /* vorobooshequeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vorobooshequeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		844A5F481A9A01A300B0F131 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		844A5F491A9A01A300B0F131 /* vorobooshequeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = vorobooshequeTests.m; sourceTree = "<group>"; };
+		84A4D4981AA986E600B53F39 /* PostsViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostsViewCell.h; sourceTree = "<group>"; };
+		84A4D4991AA986E600B53F39 /* PostsViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostsViewCell.m; sourceTree = "<group>"; };
 		84D9BB8E1AA0566B00F4F1DE /* PostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostsViewController.h; sourceTree = "<group>"; };
 		84D9BB8F1AA0566B00F4F1DE /* PostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostsViewController.m; sourceTree = "<group>"; };
 		ABA5C8F9630984E03D7476D3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -140,6 +143,8 @@
 		843142221A9B990F001132E2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				84A4D4981AA986E600B53F39 /* PostsViewCell.h */,
+				84A4D4991AA986E600B53F39 /* PostsViewCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -360,6 +365,7 @@
 				8431421A1A9B7A34001132E2 /* Makaba.m in Sources */,
 				841A76FB1AA765F800FF25AC /* MPost.m in Sources */,
 				844A5F361A9A01A300B0F131 /* ViewController.m in Sources */,
+				84A4D49A1AA986E600B53F39 /* PostsViewCell.m in Sources */,
 				843142251A9B99A5001132E2 /* BoardsViewController.m in Sources */,
 				84D9BB901AA0566B00F4F1DE /* PostsViewController.m in Sources */,
 				8416A48F1A9E401F00932AB0 /* ThreadsViewController.m in Sources */,

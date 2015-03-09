@@ -12,10 +12,12 @@
 #import "MBoard.h"
 #import "MThread.h"
 #import <CCBottomRefreshControl/UIScrollView+BottomRefreshControl.h>
+#import "PostsViewCell.h"
 
 @interface PostsViewController ()
 
 @property (nonatomic) NSMutableArray *posts;
+@property (nonatomic) PostsViewCell *offscreenCell;
 
 @end
 
@@ -24,6 +26,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.tableView.estimatedRowHeight = 128.0;
     
     self.refreshControl = [[UIRefreshControl alloc] init];
     //    self.refreshControl.backgroundColor = [UIColor purpleColor];
@@ -62,7 +66,7 @@
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"MMM d, h:mm:ss a"];
 //        NSString *title = [NSString stringWithFormat:@"Last update: %@, %d new posts", [formatter stringFromDate:[NSDate date]], newItems];
-        NSString *title = [NSString stringWithFormat:@"%d new posts, %d total", newItems, self.posts.count-1];
+        NSString *title = [NSString stringWithFormat:@"%d new posts, %d total", newItems, self.posts.count];
         NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor grayColor]
                                                                     forKey:NSForegroundColorAttributeName];
         NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
@@ -73,7 +77,7 @@
     
     if (self.tableView.bottomRefreshControl)
     {
-        NSString *title = [NSString stringWithFormat:@"%d new posts, %d total", newItems, self.posts.count-1];
+        NSString *title = [NSString stringWithFormat:@"%d new posts, %d total", newItems, self.posts.count];
         NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:[UIColor grayColor]
                                                                     forKey:NSForegroundColorAttributeName];
         NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attrsDictionary];
@@ -89,8 +93,29 @@
                              startingFromPosition:[self.posts count]+1
                                    successHandler:^(NSArray *posts)
     {
-        [self.posts addObjectsFromArray:posts];
-        [self reloadData];
+        if ([posts count])
+        {
+            NSMutableArray *indexPaths = [NSMutableArray array];
+            
+            for (id post in posts)
+            {
+//                NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:self.posts.count + [posts indexOfObject:post]];
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.posts.count + [posts indexOfObject:post] inSection:0];
+//                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.posts.count-1 inSection:0];
+                [indexPaths addObject:indexPath];
+            }
+            
+            [self.posts addObjectsFromArray:posts];
+            
+            [self.tableView beginUpdates];
+            [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation: UITableViewRowAnimationBottom];
+//            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathWithIndex:0]] withRowAnimation: UITableViewRowAnimationBottom];
+            [self.tableView endUpdates];
+            
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.posts.count - posts.count inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }
+
+//        [self reloadData];
         
         [self endRefreshingWithNewItems:posts.count];
     }
@@ -143,21 +168,59 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostsViewCell" forIndexPath:indexPath];
+    PostsViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostsViewCell" forIndexPath:indexPath];
     
     if (cell == nil)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+        cell = [[PostsViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:@"PostsViewCell"];
     }
     
     MPost *post = [self.posts objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = post.comment;
-    //    cell.detailTextLabel.text = board.name;
+    cell.commentLabel.text = post.comment;
+    
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
+    
+//    cell.commentLabel.preferredMaxLayoutWidth = CGRectGetWidth(tableView.bounds);
+    
+
     
     return cell;
 }
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    PostsViewCell *cell = self.offscreenCell;
+    
+    if (!cell)
+    {
+//        cell = [[PostsViewCell alloc] init];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:@"PostsViewCell"];
+        self.offscreenCell = cell;
+    }
+    
+    MPost *post = [self.posts objectAtIndex:indexPath.row];
+    cell.commentLabel.text = post.comment;
+    
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
+    
+    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
+    
+    [cell setNeedsLayout];
+    [cell layoutIfNeeded];
+    
+    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+//    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingExpandedSize].height;
+    
+    height += 1.0f;
+    
+    NSLog(@"H IS %f", height);
+    return height;
+}
+ 
 
 
 /*
