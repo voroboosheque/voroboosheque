@@ -2,7 +2,7 @@
 //  MPost.m
 //  voroboosheque
 //
-//  Created by admin on 04/03/15.
+//  Created by admin on 09/03/15.
 //  Copyright (c) 2015 voroboosheque. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 
 @dynamic comment;
 @dynamic num;
+@dynamic attributedComment;
 @dynamic parent;
 
 @end

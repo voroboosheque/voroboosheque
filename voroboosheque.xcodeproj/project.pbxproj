@@ -11,7 +11,6 @@
 		84141FB11A9C757A00259B4E /* CloudflareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84141FB01A9C757A00259B4E /* CloudflareViewController.m */; };
 		84157C381AA847AC00FF2126 /* MBoardCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84157C371AA847AC00FF2126 /* MBoardCategory.m */; };
 		8416A48F1A9E401F00932AB0 /* ThreadsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8416A48E1A9E401F00932AB0 /* ThreadsViewController.m */; };
-		841A76FB1AA765F800FF25AC /* MPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 841A76FA1AA765F800FF25AC /* MPost.m */; };
 		841A77011AA765F900FF25AC /* MThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 841A77001AA765F900FF25AC /* MThread.m */; };
 		841A77041AA765F900FF25AC /* MBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = 841A77031AA765F900FF25AC /* MBoard.m */; };
 		8431421A1A9B7A34001132E2 /* Makaba.m in Sources */ = {isa = PBXBuildFile; fileRef = 843142191A9B7A34001132E2 /* Makaba.m */; };
@@ -25,6 +24,7 @@
 		844A5F3B1A9A01A300B0F131 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 844A5F3A1A9A01A300B0F131 /* Images.xcassets */; };
 		844A5F3E1A9A01A300B0F131 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844A5F3C1A9A01A300B0F131 /* LaunchScreen.xib */; };
 		844A5F4A1A9A01A300B0F131 /* vorobooshequeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 844A5F491A9A01A300B0F131 /* vorobooshequeTests.m */; };
+		8497F4F31AAE1D4300BB96AF /* MPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 8497F4F21AAE1D4300BB96AF /* MPost.m */; };
 		84A4D49A1AA986E600B53F39 /* PostsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A4D4991AA986E600B53F39 /* PostsViewCell.m */; };
 		84D9BB901AA0566B00F4F1DE /* PostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84D9BB8F1AA0566B00F4F1DE /* PostsViewController.m */; };
 /* End PBXBuildFile section */
@@ -47,8 +47,6 @@
 		84157C371AA847AC00FF2126 /* MBoardCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBoardCategory.m; sourceTree = "<group>"; };
 		8416A48D1A9E401F00932AB0 /* ThreadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadsViewController.h; sourceTree = "<group>"; };
 		8416A48E1A9E401F00932AB0 /* ThreadsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadsViewController.m; sourceTree = "<group>"; };
-		841A76F91AA765F800FF25AC /* MPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPost.h; sourceTree = "<group>"; };
-		841A76FA1AA765F800FF25AC /* MPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPost.m; sourceTree = "<group>"; };
 		841A76FF1AA765F900FF25AC /* MThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MThread.h; sourceTree = "<group>"; };
 		841A77001AA765F900FF25AC /* MThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MThread.m; sourceTree = "<group>"; };
 		841A77021AA765F900FF25AC /* MBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBoard.h; sourceTree = "<group>"; };
@@ -73,6 +71,8 @@
 		844A5F431A9A01A300B0F131 /* vorobooshequeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vorobooshequeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		844A5F481A9A01A300B0F131 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		844A5F491A9A01A300B0F131 /* vorobooshequeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = vorobooshequeTests.m; sourceTree = "<group>"; };
+		8497F4F11AAE1D4300BB96AF /* MPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPost.h; sourceTree = "<group>"; };
+		8497F4F21AAE1D4300BB96AF /* MPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPost.m; sourceTree = "<group>"; };
 		84A4D4981AA986E600B53F39 /* PostsViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostsViewCell.h; sourceTree = "<group>"; };
 		84A4D4991AA986E600B53F39 /* PostsViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PostsViewCell.m; sourceTree = "<group>"; };
 		84D9BB8E1AA0566B00F4F1DE /* PostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PostsViewController.h; sourceTree = "<group>"; };
@@ -128,14 +128,14 @@
 		8431421E1A9B9539001132E2 /* ManagedObjects */ = {
 			isa = PBXGroup;
 			children = (
+				8497F4F11AAE1D4300BB96AF /* MPost.h */,
+				8497F4F21AAE1D4300BB96AF /* MPost.m */,
 				84157C361AA847AC00FF2126 /* MBoardCategory.h */,
 				84157C371AA847AC00FF2126 /* MBoardCategory.m */,
 				841A77021AA765F900FF25AC /* MBoard.h */,
 				841A77031AA765F900FF25AC /* MBoard.m */,
 				841A76FF1AA765F900FF25AC /* MThread.h */,
 				841A77001AA765F900FF25AC /* MThread.m */,
-				841A76F91AA765F800FF25AC /* MPost.h */,
-				841A76FA1AA765F800FF25AC /* MPost.m */,
 			);
 			name = ManagedObjects;
 			sourceTree = "<group>";
@@ -363,10 +363,10 @@
 				84157C381AA847AC00FF2126 /* MBoardCategory.m in Sources */,
 				843142211A9B9857001132E2 /* MakabaDataManager.m in Sources */,
 				8431421A1A9B7A34001132E2 /* Makaba.m in Sources */,
-				841A76FB1AA765F800FF25AC /* MPost.m in Sources */,
 				844A5F361A9A01A300B0F131 /* ViewController.m in Sources */,
 				84A4D49A1AA986E600B53F39 /* PostsViewCell.m in Sources */,
 				843142251A9B99A5001132E2 /* BoardsViewController.m in Sources */,
+				8497F4F31AAE1D4300BB96AF /* MPost.m in Sources */,
 				84D9BB901AA0566B00F4F1DE /* PostsViewController.m in Sources */,
 				8416A48F1A9E401F00932AB0 /* ThreadsViewController.m in Sources */,
 				8431421D1A9B922C001132E2 /* Model.xcdatamodeld in Sources */,

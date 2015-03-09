@@ -248,6 +248,10 @@
                     post.parent = thread;
                     post.num = num;
                     post.comment = [jOPPost objectForKey:@"comment"];
+                    post.attributedComment = [[NSAttributedString alloc] initWithData:[post.comment dataUsingEncoding:NSUTF8StringEncoding]
+                                                                              options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                                        NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                                   documentAttributes:nil error:nil];
                 }
             }
             
@@ -289,6 +293,10 @@
                  {
                      post = [MPost MR_createEntity];
                      post.comment = [jPost objectForKey:@"comment"];
+                     post.attributedComment = [[NSAttributedString alloc] initWithData:[post.comment dataUsingEncoding:NSUTF8StringEncoding]
+                                                                               options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                                         NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                                    documentAttributes:nil error:nil];
                      post.num = num;
                      post.parent = thread;
 //                     [thread addPostsObject: post];

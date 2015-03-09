@@ -2,7 +2,7 @@
 //  MPost.h
 //  voroboosheque
 //
-//  Created by admin on 04/03/15.
+//  Created by admin on 09/03/15.
 //  Copyright (c) 2015 voroboosheque. All rights reserved.
 //
 
@@ -15,6 +15,7 @@
 
 @property (nonatomic, retain) NSString * comment;
 @property (nonatomic, retain) NSNumber * num;
+@property (nonatomic, retain) id attributedComment;
 @property (nonatomic, retain) MThread *parent;
 
 @end

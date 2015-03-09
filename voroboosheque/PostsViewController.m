@@ -178,7 +178,9 @@
     
     MPost *post = [self.posts objectAtIndex:indexPath.row];
     
-    cell.commentLabel.text = post.comment;
+//    cell.commentLabel.text = post.comment;
+    cell.commentLabel.attributedText = post.attributedComment;
+    cell.commentLabel.font=[cell.commentLabel.font fontWithSize:18.0];
     
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
@@ -202,7 +204,9 @@
     }
     
     MPost *post = [self.posts objectAtIndex:indexPath.row];
-    cell.commentLabel.text = post.comment;
+//    cell.commentLabel.text = post.comment;
+    cell.commentLabel.attributedText = post.attributedComment;
+    cell.commentLabel.font=[cell.commentLabel.font fontWithSize:18.0];
     
     [cell setNeedsUpdateConstraints];
     [cell updateConstraintsIfNeeded];
@@ -216,8 +220,7 @@
 //    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingExpandedSize].height;
     
     height += 1.0f;
-    
-    NSLog(@"H IS %f", height);
+
     return height;
 }
  
