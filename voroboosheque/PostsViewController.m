@@ -17,6 +17,7 @@
 @interface PostsViewController ()
 
 @property (nonatomic) NSMutableArray *posts;
+@property (nonatomic) NSMutableArray *postsHeights;
 @property (nonatomic) PostsViewCell *offscreenCell;
 
 @end
@@ -42,6 +43,10 @@
     self.tableView.bottomRefreshControl = bottomRefreshControl;
     
     self.posts = [NSMutableArray arrayWithArray:[[MakabaDataManager shared] getCachedPostsForThread:self.thread]] ;
+    self.postsHeights = [NSMutableArray array];
+    
+    [self reloadData];
+    
 
     [self fetchNewPosts];
     
@@ -176,14 +181,7 @@
                                       reuseIdentifier:@"PostsViewCell"];
     }
     
-    MPost *post = [self.posts objectAtIndex:indexPath.row];
-    
-//    cell.commentLabel.text = post.comment;
-    cell.commentLabel.attributedText = post.attributedComment;
-    cell.commentLabel.font=[cell.commentLabel.font fontWithSize:18.0];
-    
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
+    [self configureCell:cell forTableView:tableView atIndexPath:indexPath];
     
 //    cell.commentLabel.preferredMaxLayoutWidth = CGRectGetWidth(tableView.bounds);
     
@@ -192,8 +190,43 @@
     return cell;
 }
 
+-(void)configureCell:(PostsViewCell*)cell forTableView:(UITableView*)tableView atIndexPath:(NSIndexPath *)indexPath
+{
+    MPost *post = [self.posts objectAtIndex:indexPath.row];
+    //    cell.commentLabel.text = post.comment;
+    cell.commentTextView.attributedText = post.attributedComment;
+//    "▲%ld ▼%ld"
+//    cell.commentLabel.font=[cell.commentLabel.font fontWithSize:18.0];
+    
+    //to wrap text around an image
+    //textkit or coretext
+    
+//    UIBezierPath * imgRect = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, 100, 100)];
+//    self.textView.textContainer.exclusionPaths = @[imgRect];
+    
+    
+    cell.commentTextView.font = [UIFont fontWithName:@"TrebuchetMS" size:16.0];
+    
+    if (indexPath.row%2)
+    {
+        [cell setBackgroundColor:[UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0]];
+    }
+    else
+    {
+        [cell setBackgroundColor:[UIColor colorWithRed:242.0/255.0 green:242.0/255.0 blue:242.0/255.0 alpha:1.0]];
+    }
+    
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
+}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.postsHeights.count>indexPath.row)
+    {
+        return [[self.postsHeights objectAtIndex:indexPath.row] floatValue];
+    }
+    
     PostsViewCell *cell = self.offscreenCell;
     
     if (!cell)
@@ -203,23 +236,21 @@
         self.offscreenCell = cell;
     }
     
-    MPost *post = [self.posts objectAtIndex:indexPath.row];
-//    cell.commentLabel.text = post.comment;
-    cell.commentLabel.attributedText = post.attributedComment;
-    cell.commentLabel.font=[cell.commentLabel.font fontWithSize:18.0];
-    
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
+    [self configureCell:cell forTableView:tableView atIndexPath:indexPath];
     
     cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
     
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
     
-    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-//    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingExpandedSize].height;
+//    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingExpandedSize].height;
+    height = [cell.commentTextView sizeThatFits:CGSizeMake(cell.bounds.size.width, 500)].height;
+    height += 16.0;
     
     height += 1.0f;
+    
+    [self.postsHeights addObject:[NSNumber numberWithFloat:height]];
 
     return height;
 }

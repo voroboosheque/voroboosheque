@@ -271,7 +271,7 @@
           successHandler:(void (^)(NSArray *))successHandler
           failureHandler:(makabaDataReturnBlockWithError)failureHandler
 {
-    NSLog(@"+++++++++++  %d", [[MPost MR_findAll] count]);
+//    NSLog(@"+++++++++++  %d", [[MPost MR_findAll] count]);
     
     [[Makaba shared] getPostsForBoard:thread.board.id
                             andThread:[thread.num unsignedIntegerValue]

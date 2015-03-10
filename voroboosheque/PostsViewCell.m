@@ -13,6 +13,7 @@
 - (void)awakeFromNib
 {
 //    self.commentLabel.lineBreakMode = NSLineBreakByWordWrapping;
+//    [self setBackgroundColor:[UIColor colorWithRed:238.0/255.0 green:238.0/255.0 blue:238.0/255.0 alpha:1.0]];
     
 }
 
@@ -34,7 +35,7 @@
     
     // Set the preferredMaxLayoutWidth of the mutli-line bodyLabel based on the evaluated width of the label's frame,
     // as this will allow the text to wrap correctly, and as a result allow the label to take on the correct height.
-    self.commentLabel.preferredMaxLayoutWidth = CGRectGetWidth(self.commentLabel.frame);
+//    self.commentTextView.preferredMaxLayoutWidth = CGRectGetWidth(self.commentTextView.frame);
 }
 
 @end

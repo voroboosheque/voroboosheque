@@ -10,6 +10,6 @@
 
 @interface PostsViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *commentLabel;
+@property (weak, nonatomic) IBOutlet UITextView *commentTextView;
 
 @end
