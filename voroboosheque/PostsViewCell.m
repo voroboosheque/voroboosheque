@@ -24,6 +24,7 @@
     // Configure the view for the selected state
 }
 
+/*
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -37,5 +38,6 @@
     // as this will allow the text to wrap correctly, and as a result allow the label to take on the correct height.
 //    self.commentTextView.preferredMaxLayoutWidth = CGRectGetWidth(self.commentTextView.frame);
 }
+ */
 
 @end

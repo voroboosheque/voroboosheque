@@ -15,6 +15,9 @@
 #import "PostsViewCell.h"
 
 @interface PostsViewController ()
+{
+
+}
 
 @property (nonatomic) NSMutableArray *posts;
 @property (nonatomic) NSMutableArray *postsHeights;
@@ -28,7 +31,7 @@
 {
     [super viewDidLoad];
     
-    self.tableView.estimatedRowHeight = 128.0;
+    self.tableView.estimatedRowHeight = 256.0;
     
     self.refreshControl = [[UIRefreshControl alloc] init];
     //    self.refreshControl.backgroundColor = [UIColor purpleColor];
@@ -44,10 +47,10 @@
     
     self.posts = [NSMutableArray arrayWithArray:[[MakabaDataManager shared] getCachedPostsForThread:self.thread]] ;
     self.postsHeights = [NSMutableArray array];
+//    [self calculateHeights];
     
     [self reloadData];
     
-
     [self fetchNewPosts];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -104,17 +107,17 @@
             
             for (id post in posts)
             {
-//                NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:self.posts.count + [posts indexOfObject:post]];
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.posts.count + [posts indexOfObject:post] inSection:0];
-//                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:self.posts.count-1 inSection:0];
                 [indexPaths addObject:indexPath];
             }
             
             [self.posts addObjectsFromArray:posts];
+//            NSLog(@">>>azzzzaa start");
+//            [self calculateHeights];
+//            NSLog(@">>>azzzzaa end");
             
             [self.tableView beginUpdates];
             [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation: UITableViewRowAnimationBottom];
-//            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathWithIndex:0]] withRowAnimation: UITableViewRowAnimationBottom];
             [self.tableView endUpdates];
             
             [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.posts.count - posts.count inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
@@ -148,24 +151,16 @@
      }];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return [self.posts count];
 }
@@ -173,6 +168,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
     PostsViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PostsViewCell" forIndexPath:indexPath];
     
     if (cell == nil)
@@ -185,8 +181,6 @@
     
 //    cell.commentLabel.preferredMaxLayoutWidth = CGRectGetWidth(tableView.bounds);
     
-
-    
     return cell;
 }
 
@@ -195,17 +189,9 @@
     MPost *post = [self.posts objectAtIndex:indexPath.row];
     //    cell.commentLabel.text = post.comment;
     cell.commentTextView.attributedText = post.attributedComment;
-//    "▲%ld ▼%ld"
-//    cell.commentLabel.font=[cell.commentLabel.font fontWithSize:18.0];
-    
-    //to wrap text around an image
-    //textkit or coretext
-    
-//    UIBezierPath * imgRect = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, 100, 100)];
-//    self.textView.textContainer.exclusionPaths = @[imgRect];
-    
-    
-    cell.commentTextView.font = [UIFont fontWithName:@"TrebuchetMS" size:16.0];
+//    "▲▼"
+ 
+//    cell.commentTextView.font = [UIFont fontWithName:@"TrebuchetMS" size:16.0];
     
     if (indexPath.row%2)
     {
@@ -216,89 +202,59 @@
         [cell setBackgroundColor:[UIColor colorWithRed:242.0/255.0 green:242.0/255.0 blue:242.0/255.0 alpha:1.0]];
     }
     
-    [cell setNeedsUpdateConstraints];
-    [cell updateConstraintsIfNeeded];
+//    [cell setNeedsUpdateConstraints];
+//    [cell updateConstraintsIfNeeded];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //TODO: implement faster method
+    if (self.postsHeights.count>indexPath.row)
+    {
+        return [[self.postsHeights objectAtIndex:indexPath.row] floatValue];
+    }
+    else
+    {
+        MPost *post = [self.posts objectAtIndex:indexPath.row];
+        
+        PostsViewCell *cell = self.offscreenCell;
+        
+        if (!cell)
+        {
+            cell = [self.tableView dequeueReusableCellWithIdentifier:@"PostsViewCell"];
+            self.offscreenCell = cell;
+        }
+        
+        [self configureCell:cell forTableView:self.tableView atIndexPath:[NSIndexPath indexPathForRow:[self.posts indexOfObject:post] inSection:0]];
+        
+        cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(self.tableView.bounds), CGRectGetHeight(cell.bounds));
+        
+        [cell setNeedsLayout];
+        [cell layoutIfNeeded];
+        
+        //    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+        CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingExpandedSize].height;
+        height = [cell.commentTextView sizeThatFits:CGSizeMake(cell.bounds.size.width, 500)].height;
+        height += 16.0;
+        
+        height += 1.0f;
+        
+        [self.postsHeights addObject: [NSNumber numberWithFloat:height]];
+        
+        return height;
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.postsHeights.count>indexPath.row)
     {
         return [[self.postsHeights objectAtIndex:indexPath.row] floatValue];
     }
-    
-    PostsViewCell *cell = self.offscreenCell;
-    
-    if (!cell)
+    else
     {
-//        cell = [[PostsViewCell alloc] init];
-        cell = [self.tableView dequeueReusableCellWithIdentifier:@"PostsViewCell"];
-        self.offscreenCell = cell;
+        return 256.0;
     }
-    
-    [self configureCell:cell forTableView:tableView atIndexPath:indexPath];
-    
-    cell.bounds = CGRectMake(0.0f, 0.0f, CGRectGetWidth(tableView.bounds), CGRectGetHeight(cell.bounds));
-    
-    [cell setNeedsLayout];
-    [cell layoutIfNeeded];
-    
-//    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingExpandedSize].height;
-    height = [cell.commentTextView sizeThatFits:CGSizeMake(cell.bounds.size.width, 500)].height;
-    height += 16.0;
-    
-    height += 1.0f;
-    
-    [self.postsHeights addObject:[NSNumber numberWithFloat:height]];
-
-    return height;
 }
- 
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
